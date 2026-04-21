@@ -1,31 +1,31 @@
 import Post from '@/components/Post/Post';
+import { ShowPostData, useShowPost } from '@/hooks/Post/useShowPost';
+import { patchSinglePostLike } from '@/hooks/Like/cache';
+import { postKeys } from '@/hooks/Post/queryKeys';
 import AppLayout from '@/layouts/app-layout';
-import { usePage } from '@inertiajs/react';
-
-interface Media {
-    id: number;
-    type: string;
-    url: string;
-}
-
-interface Post {
-    id: number;
-    caption: string | null;
-    media: Media[];
-    likes_count?: number;
-    liked?: boolean;
-}
 
 interface ShowProps {
-    post: Post;
+    post: ShowPostData;
 }
 
 const Show = ({ post }: ShowProps) => {
-    const { auth: { user } } = usePage().props;
+    const { data: currentPost } = useShowPost(post);
+
+    if (!currentPost) {
+        return null;
+    }
 
     return (
         <AppLayout>
-            <Post post={post} user={user} queryKey={["posts"] } commentShow={true} />
+            <div className="mx-auto max-w-2xl px-4 py-6">
+                <Post
+                    post={currentPost}
+                    user={currentPost.user}
+                    queryKey={postKeys.detail(currentPost.id)}
+                    patchQueryData={patchSinglePostLike}
+                    commentShow={true}
+                />
+            </div>
         </AppLayout>
     );
 };

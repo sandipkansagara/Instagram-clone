@@ -1,4 +1,5 @@
-import Post, { PostCardData } from '@/components/Post/Post';
+import Post from '@/components/Post/Post';
+import type { PostCardData } from '@/components/Post/types';
 import { patchPostsLike } from '@/hooks/Like/cache';
 
 interface User {

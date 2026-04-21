@@ -12,10 +12,7 @@ interface Notification {
 
 interface NotificationsData {
     data: Notification[];
-
-    meta: {
-        next_cursor: string | null;
-    };
+    next_cursor: string | null;
 }
 
 export const useNotification = (notifications: NotificationsData) => {
@@ -28,7 +25,7 @@ export const useNotification = (notifications: NotificationsData) => {
             });
             return res.data;
         },
-        getNextPageParam: (lastPage) =>  lastPage.meta.next_cursor,
+        getNextPageParam: (lastPage) => lastPage.next_cursor,
         initialPageParam: null,
         //set the initial data to an empty array
         initialData: {

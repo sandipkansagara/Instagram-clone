@@ -9,8 +9,12 @@ import { Spinner } from '@/components/ui/spinner';
 import AuthLayout from '@/layouts/auth-layout';
 import { login } from '@/routes';
 import { store } from '@/routes/register';
+import { useInertiaFormWithZod } from '@/hooks/useInertiaFormWithZod';
+import { registerSchema } from '@/lib/schemas';
 
 export default function Register() {
+    const { clientErrors, validateField, clearClientError } =
+        useInertiaFormWithZod(registerSchema);
     return (
         <AuthLayout
             title="Create an account"
@@ -37,9 +41,24 @@ export default function Register() {
                                     autoComplete="name"
                                     name="name"
                                     placeholder="Full name"
+                                    onChange={(e) => {
+                                        validateField('name', e.target.value);
+                                    }}
+                                    onBlur={(e) =>
+                                        validateField('name', e.target.value)
+                                    }
+                                    aria-invalid={
+                                        !!errors?.name || !!clientErrors.name
+                                    }
+                                    aria-describedby={
+                                        errors?.name || clientErrors.name
+                                            ? 'name-error'
+                                            : undefined
+                                    }
                                 />
                                 <InputError
-                                    message={errors.name}
+                                    id="name-error"
+                                    message={errors?.name || clientErrors.name}
                                     className="mt-2"
                                 />
                             </div>
@@ -54,8 +73,27 @@ export default function Register() {
                                     autoComplete="email"
                                     name="email"
                                     placeholder="email@example.com"
+                                    onChange={(e) => {
+                                        validateField('email', e.target.value);
+                                    }}
+                                    onBlur={(e) =>
+                                        validateField('email', e.target.value)
+                                    }
+                                    aria-invalid={
+                                        !!errors?.email || !!clientErrors.email
+                                    }
+                                    aria-describedby={
+                                        errors?.email || clientErrors.email
+                                            ? 'email-error'
+                                            : undefined
+                                    }
                                 />
-                                <InputError message={errors.email} />
+                                <InputError
+                                    id="email-error"
+                                    message={
+                                        errors?.email || clientErrors.email
+                                    }
+                                />
                             </div>
 
                             <div className="grid gap-2">
@@ -67,8 +105,39 @@ export default function Register() {
                                     autoComplete="new-password"
                                     name="password"
                                     placeholder="Password"
+                                    onChange={(e) => {
+                                        validateField(
+                                            'password',
+                                            e.target.value,
+                                        );
+                                        clearClientError(
+                                            'password_confirmation',
+                                        ); // Clear confirmation error when password changes
+                                    }}
+                                    onBlur={(e) =>
+                                        validateField(
+                                            'password',
+                                            e.target.value,
+                                        )
+                                    }
+                                    aria-invalid={
+                                        !!errors?.password ||
+                                        !!clientErrors.password
+                                    }
+                                    aria-describedby={
+                                        errors?.password ||
+                                        clientErrors.password
+                                            ? 'password-error'
+                                            : undefined
+                                    }
                                 />
-                                <InputError message={errors.password} />
+                                <InputError
+                                    id="password-error"
+                                    message={
+                                        errors?.password ||
+                                        clientErrors.password
+                                    }
+                                />
                             </div>
 
                             <div className="grid gap-2">
@@ -82,9 +151,35 @@ export default function Register() {
                                     autoComplete="new-password"
                                     name="password_confirmation"
                                     placeholder="Confirm password"
+                                    onChange={(e) => {
+                                        validateField(
+                                            'password_confirmation',
+                                            e.target.value,
+                                        );
+                                    }}
+                                    onBlur={(e) =>
+                                        validateField(
+                                            'password_confirmation',
+                                            e.target.value,
+                                        )
+                                    }
+                                    aria-invalid={
+                                        !!errors?.password_confirmation ||
+                                        !!clientErrors.password_confirmation
+                                    }
+                                    aria-describedby={
+                                        errors?.password_confirmation ||
+                                        clientErrors.password_confirmation
+                                            ? 'password-confirmation-error'
+                                            : undefined
+                                    }
                                 />
                                 <InputError
-                                    message={errors.password_confirmation}
+                                    id="password-confirmation-error"
+                                    message={
+                                        errors?.password_confirmation ||
+                                        clientErrors.password_confirmation
+                                    }
                                 />
                             </div>
 

@@ -11,6 +11,8 @@ import AuthLayout from '@/layouts/auth-layout';
 import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
+import { useInertiaFormWithZod } from '@/hooks/useInertiaFormWithZod';
+import { loginSchema } from '@/lib/schemas';
 
 type Props = {
     status?: string;
@@ -23,6 +25,9 @@ export default function Login({
     canResetPassword,
     canRegister,
 }: Props) {
+    const { clientErrors, validateField, clearClientError } =
+        useInertiaFormWithZod(loginSchema);
+
     return (
         <AuthLayout
             title="Log in to your account"
@@ -49,8 +54,25 @@ export default function Login({
                                     tabIndex={1}
                                     autoComplete="email"
                                     placeholder="email@example.com"
+                                    onChange={(e) => {
+                                        validateField('email', e.target.value);
+                                    }}
+                                    onBlur={(e) =>
+                                        validateField('email', e.target.value)
+                                    }
+                                    aria-invalid={
+                                        !!errors.email || !!clientErrors.email
+                                    }
+                                    aria-describedby={
+                                        errors.email || clientErrors.email
+                                            ? 'email-error'
+                                            : undefined
+                                    }
                                 />
-                                <InputError message={errors.email} />
+                                <InputError
+                                    id="email-error"
+                                    message={errors.email || clientErrors.email}
+                                />
                             </div>
 
                             <div className="grid gap-2">
@@ -73,8 +95,35 @@ export default function Login({
                                     tabIndex={2}
                                     autoComplete="current-password"
                                     placeholder="Password"
+                                    onChange={(e) => {
+                                        validateField(
+                                            'password',
+                                            e.target.value,
+                                        );
+                                        clearClientError('password');
+                                    }}
+                                    onBlur={(e) =>
+                                        validateField(
+                                            'password',
+                                            e.target.value,
+                                        )
+                                    }
+                                    aria-invalid={
+                                        !!errors.password ||
+                                        !!clientErrors.password
+                                    }
+                                    aria-describedby={
+                                        errors.password || clientErrors.password
+                                            ? 'password-error'
+                                            : undefined
+                                    }
                                 />
-                                <InputError message={errors.password} />
+                                <InputError
+                                    id="password-error"
+                                    message={
+                                        errors.password || clientErrors.password
+                                    }
+                                />
                             </div>
 
                             <div className="flex items-center space-x-3">

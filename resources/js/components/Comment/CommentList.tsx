@@ -1,31 +1,35 @@
+import type { CommentItemData } from '@/components/Comment/types';
 import useComment from '@/hooks/Comment/useComment';
 import Comment from './Comment';
-import { i } from 'node_modules/vite/dist/node/chunks/moduleRunnerTransport';
-
-interface Comment {
-    id: number;
-    body: string;
-    created_at: string;
-    user: {
-        name: string;
-        profile?: {
-            avatar?: string | null;
-        };
-    };
-}
-
-interface CommentList{
-    comments: Comment[];
-}
 
 const CommentList = ({ postId }: { postId: number }) => {
-    const { data: commentData, isLoading } = useComment(postId);
+    const { data: commentList = [], isLoading, isError } = useComment(postId);
+
     return (
-        <div>
-            {isLoading && <p>Loading...</p>}
-            {commentData.length === 0 ? <p>No comments yet.</p> : commentData?.map((comment: Comment) => (
-                <Comment key={comment.id} comment={comment} />
-            ))}
+        <div className="space-y-3">
+            {isLoading && (
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Loading comments...
+                </p>
+            )}
+
+            {isError && (
+                <p className="text-sm text-red-500 dark:text-red-400">
+                    Unable to load comments right now.
+                </p>
+            )}
+
+            {!isLoading && !isError && commentList.length === 0 && (
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                    No comments yet.
+                </p>
+            )}
+
+            {!isLoading &&
+                !isError &&
+                commentList.map((comment: CommentItemData) => (
+                    <Comment key={comment.id} comment={comment} />
+                ))}
         </div>
     );
 };

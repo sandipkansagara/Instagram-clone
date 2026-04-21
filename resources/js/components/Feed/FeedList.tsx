@@ -1,8 +1,7 @@
+import ErrorBoundary from '@/components/ErrorBoundary';
 import { patchFeedLike } from '@/hooks/Like/cache';
 import { FeedItem } from '@/pages/Feed/Index';
 import Post from '../Post/Post';
-import { Link } from '@inertiajs/react';
-import { show } from '@/routes/posts';
 
 const FeedList = ({ feed }: { feed: FeedItem[] }) => {
     return (
@@ -15,13 +14,14 @@ const FeedList = ({ feed }: { feed: FeedItem[] }) => {
                 const post = item.post;
 
                 return (
-                    <Post
-                        key={item.id}
-                        post={post}
-                        user={post.user}
-                        queryKey={['feed']}
-                        patchQueryData={patchFeedLike}
-                    />
+                    <ErrorBoundary key={item.id}>
+                        <Post
+                            post={post}
+                            user={post.user}
+                            queryKey={['feed']}
+                            patchQueryData={patchFeedLike}
+                        />
+                    </ErrorBoundary>
                 );
             })}
         </div>

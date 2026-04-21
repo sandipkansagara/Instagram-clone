@@ -16,7 +16,7 @@ class CommentController extends Controller
 
         return response()->json($comments);
     }
-    
+
     public function store(StoreCommentForm $request, Post $post, AddComment $addComment)
     {
         $addComment->execute($post, auth()->user(), $request->validated());

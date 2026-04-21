@@ -4,7 +4,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 export const useFeed = (feed: Feed) => {
-    return useInfiniteQuery({
+    return useInfiniteQuery<Feed, Error>({
         queryKey: ['feed'],
         queryFn: async ({ pageParam = null }) => {
             const res = await axios.get(index.url(), {

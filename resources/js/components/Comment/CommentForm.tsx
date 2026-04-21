@@ -1,31 +1,49 @@
-import { useCreateComment } from '@/hooks/useCreateComment';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import InputError from '@/components/input-error';
+import { useCreateComment } from '@/hooks/Comment/useCreateComment';
+import { createCommentSchema, type CreateCommentData } from '@/lib/schemas';
 
 const CommentForm = ({ postId }: { postId: number }) => {
-    const { mutate: createComment, isPending } = useCreateComment();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+        reset,
+    } = useForm<CreateCommentData>({
+        resolver: zodResolver(createCommentSchema),
+    });
+    const { mutateAsync: createComment } = useCreateComment();
 
+    const onSubmit = async (data: CreateCommentData) => {
+        await createComment({
+            postId,
+            body: data.body,
+        });
 
+        reset();
+    };
 
     return (
-        <form
-            action={
-                (formData: FormData) => createComment({ formData, postId })
-            }
-            className="mt-4"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
             <div className="flex gap-2">
-                <input
-                    name="body"
+                <Input
+                    {...register('body')}
                     placeholder="Write a comment..."
-                    className="flex-1 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder-gray-400"
+                    className="flex-1"
+                    disabled={isSubmitting}
+                    aria-invalid={!!errors.body}
+                    aria-describedby={errors.body ? 'comment-error' : undefined}
                 />
-                <button
-                    type="submit"
-                    disabled={isPending}
-                    className="rounded-md bg-indigo-600 px-4 py-2 text-sm text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                >
-                    {isPending ? 'Posting...' : 'Comment'}
-                </button>
+                <Button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? 'Posting...' : 'Comment'}
+                </Button>
             </div>
+            {errors.body && (
+                <InputError id="comment-error" message={errors.body.message} />
+            )}
         </form>
     );
 };

@@ -13,7 +13,13 @@ class GetPost
         return Cache::remember(
             "post:{$postId}",
             now()->addMinutes(10),
-            fn (): Post => Post::with('media', 'likes', 'comments.user', 'comments.replies')->findOrFail($postId)
+            fn (): Post => Post::with([
+                'user.profile',
+                'media',
+                'likes',
+                'comments.user.profile',
+                'comments.replies',
+            ])->findOrFail($postId)
         );
     }
 }

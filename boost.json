@@ -19,6 +19,7 @@
         "tailwindcss-development",
         "echo-react-development",
         "echo-development",
-        "fortify-development"
+        "fortify-development",
+        "tanstack-query-best-practices"
     ]
 }

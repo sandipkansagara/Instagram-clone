@@ -61,3 +61,17 @@ export const patchPostsLike = (old: any, { postId, isLiked }: ToggleLikeVars) =>
         })),
     };
 };
+
+export const patchSinglePostLike = (
+    old: any,
+    { postId, isLiked }: ToggleLikeVars,
+) => {
+    if (!old || old.id !== postId) {
+        return old;
+    }
+
+    return {
+        ...old,
+        ...nextLikeState(old.likes_count, isLiked),
+    };
+};

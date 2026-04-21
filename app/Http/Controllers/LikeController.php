@@ -16,7 +16,7 @@ class LikeController extends Controller
             return response()->json(['success' => true]);
         }
 
-        return back();
+        return response()->noContent();
     }
 
     public function destroy(Post $post, UnlikePost $unlikePost)

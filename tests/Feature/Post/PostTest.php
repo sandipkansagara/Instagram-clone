@@ -178,6 +178,8 @@ it('user can view a single post', function () {
         ->has('post')
         ->where('post.id', $post->id)
         ->where('post.caption', $post->caption)
+        ->where('post.user.id', $user->id)
+        ->where('post.user.name', $user->name)
     );
 });
 

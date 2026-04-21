@@ -37,7 +37,7 @@ export const useToggleLike = ({
 
             const previous = queryClient.getQueryData(queryKey);
 
-            queryClient.setQueryData(queryKey, (old) => patchQueryData(old, vars));
+            queryClient.setQueryData(queryKey, (old: unknown) => patchQueryData(old, vars));
 
             return { previous };
         },

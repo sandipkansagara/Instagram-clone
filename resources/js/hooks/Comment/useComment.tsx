@@ -1,17 +1,20 @@
-import comments, { index } from "@/routes/posts/comments";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios"
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { index } from '@/actions/App/Http/Controllers/CommentController';
+import type { CommentItemData } from '@/components/Comment/types';
+import { commentKeys } from '@/hooks/Comment/queryKeys';
 
 const useComment = (postId: number) => {
-    return useQuery({
-        queryKey: ['comments'],
+    return useQuery<CommentItemData[]>({
+        queryKey: commentKeys.byPost(postId),
         queryFn: async () => {
-            const res = await axios.get(index.url(postId), {
+            const response = await axios.get(index.url({ post: postId }), {
                 headers: { Accept: 'application/json' },
-            }) ;
-            return res.data;
-        }
-    })
-}
+            });
+
+            return response.data;
+        },
+    });
+};
 
 export default useComment;
