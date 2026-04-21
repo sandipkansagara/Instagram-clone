@@ -18,6 +18,7 @@ import type { NavItem } from '@/types';
 import posts from '@/routes/posts';
 import feed from '@/routes/feed';
 import notifications from '@/routes/notifications';
+import users from '@/routes/users';
 
 const mainNavItems: NavItem[] = [
     {
@@ -40,6 +41,11 @@ const mainNavItems: NavItem[] = [
         href: notifications.index(),
         icon: LayoutGrid,
     },
+    {
+        title: 'Users',
+        href: users.index(),
+        icon: LayoutGrid,
+    }
 ];
 
 const footerNavItems: NavItem[] = [

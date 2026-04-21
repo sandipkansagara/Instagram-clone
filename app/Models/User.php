@@ -3,8 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -13,7 +13,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
 
     /**
@@ -53,10 +53,6 @@ class User extends Authenticatable
         ];
     }
 
-    protected $dispatchesEvents = [
-        'updated' => \App\Events\UserUpdated::class,
-    ];
-
     public function profile()
     {
         return $this->hasOne(Profile::class);
@@ -87,8 +83,13 @@ class User extends Authenticatable
         return $this->hasMany(Like::class);
     }
 
-    public function notifications(): HasMany
-    {
-        return $this->hasMany(Notification::class);
-    }
+    // public function notifications(): HasMany
+    // {
+    //     return $this->hasMany(Notification::class, 'notifiable_id')->where('notifiable_type', self::class);
+    // }
+
+    // public function unreadNotifications(): HasMany
+    // {
+    //     return $this->notifications()->whereNull('read_at');
+    // }
 }

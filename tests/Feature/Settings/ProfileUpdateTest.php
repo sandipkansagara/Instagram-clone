@@ -35,7 +35,6 @@ test('profile information can be updated', function () {
 
 test('email verification status is unchanged when the email address is unchanged', function () {
     $user = User::factory()->create();
-
     $response = $this
         ->actingAs($user)
         ->patch(route('profile.update'), [

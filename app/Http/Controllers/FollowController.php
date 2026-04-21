@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Domains\User\Services\FollowServices;
+use App\Domains\User\Actions\FollowUser;
+use App\Domains\User\Actions\UnfollowUser;
+use App\Http\Requests\FollowRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class FollowController extends Controller
 {
-    public function store(User $user, FollowServices $followServices)
+    public function store(FollowRequest $request, User $user, FollowUser $followUser)
     {
-        $followServices->follow(auth()->user(), $user);
+        $followUser->execute(auth()->user(), $user);
 
-        return back();
+        return response()->noContent();
     }
 
-    public function destroy(User $user, FollowServices $followServices)
+    public function destroy(User $user, UnfollowUser $unfollowUser)
     {
-        $followServices->unfollow(auth()->user(), $user);
+        $unfollowUser->execute(auth()->user(), $user);
 
-        return back();
+        return response()->noContent();
     }
 }

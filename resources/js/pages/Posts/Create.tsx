@@ -1,18 +1,15 @@
-import { router } from '@inertiajs/react';
+import { useCreatePost } from '@/hooks/Post/useCreatePost';
 
 export default function Create() {
-    const submit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const createPost = useCreatePost();
 
-        const form = e.currentTarget as HTMLFormElement;
-        const formData = new FormData(form);
-
-        router.post('/posts', formData);
+    const handleAction = (formData: FormData) => {
+        createPost.mutate(formData);
     };
 
     return (
         <form
-            onSubmit={submit}
+            action={handleAction}
             className="mx-auto mt-8 max-w-xl space-y-4 rounded-lg bg-white p-6 shadow-sm dark:bg-gray-800 dark:shadow-lg"
         >
             <div>

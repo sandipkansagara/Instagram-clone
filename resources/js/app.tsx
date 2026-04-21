@@ -4,8 +4,10 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import '../css/app.css';
 import { initializeTheme } from '@/hooks/use-appearance';
-import { configureEcho, useEcho } from '@laravel/echo-react';
-import Echo from 'laravel-echo';
+import { configureEcho } from '@laravel/echo-react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 configureEcho({
     broadcaster: 'reverb',
@@ -25,7 +27,9 @@ createInertiaApp({
 
         root.render(
             <StrictMode>
-                <App {...props} />
+                <QueryClientProvider client={queryClient}>
+                    <App {...props} />
+                </QueryClientProvider>
             </StrictMode>,
         );
     },

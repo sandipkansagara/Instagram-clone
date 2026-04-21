@@ -20,6 +20,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import {
   Tooltip,
   TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { PanelLeftIcon } from "lucide-react"
@@ -524,7 +525,8 @@ function SidebarMenuButton({
     }
   }
 
-  return (
+    return (
+      <TooltipProvider>
     <Tooltip>
       <TooltipTrigger asChild>{button}</TooltipTrigger>
       <TooltipContent
@@ -533,7 +535,8 @@ function SidebarMenuButton({
         hidden={state !== "collapsed" || isMobile}
         {...tooltip}
       />
-    </Tooltip>
+            </Tooltip>
+            </TooltipProvider>
   )
 }
 

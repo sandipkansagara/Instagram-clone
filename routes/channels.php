@@ -10,3 +10,7 @@ Broadcast::channel('App.Models.User.{id}', function (User $user, $id) {
 Broadcast::channel('user.{id}', function (User $user, $id) {
     return $user->id == $id;
 });
+
+Broadcast::channel('post-feed', function (User $user) {
+    return true;
+});

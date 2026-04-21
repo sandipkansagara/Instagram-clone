@@ -2,19 +2,23 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Post extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'user_id',
         'caption',
     ];
 
     protected $casts = [
-        'liked' => 'boolean'
+        'liked' => 'boolean',
     ];
 
     public function user(): BelongsTo
@@ -34,7 +38,7 @@ class Post extends Model
 
     public function isLikedBy(?User $user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
@@ -49,4 +53,10 @@ class Post extends Model
     {
         return $this->hasMany(Comment::class)->whereNull('parent_id');
     }
+
+    // public function isLiked(): Attribute
+    // {
+    //     return Attribute::make(get: fn() => $this->isLikedBy(auth()->user()));
+    // }
+
 }

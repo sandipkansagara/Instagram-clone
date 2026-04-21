@@ -2,7 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\Comment;
+use App\Models\Like;
+use App\Models\Post;
+use App\Models\User;
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
@@ -23,7 +29,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // DatabaseNotification::creating(function ($notification) {
+        //     if (!$notification->id) {
+        //         $notification->id = (string) \Illuminate\Support\Str::uuid();
+        //     }
+        // });
+
         $this->configureDefaults();
+        Relation::enforceMorphMap($this->morphMapModels());
     }
 
     /**
@@ -37,7 +50,8 @@ class AppServiceProvider extends ServiceProvider
             app()->isProduction(),
         );
 
-        Password::defaults(fn (): ?Password => app()->isProduction()
+        Password::defaults(
+            fn (): ?Password => app()->isProduction()
             ? Password::min(12)
                 ->mixedCase()
                 ->letters()
@@ -46,5 +60,15 @@ class AppServiceProvider extends ServiceProvider
                 ->uncompromised()
             : null,
         );
+    }
+
+    protected function morphMapModels(): array
+    {
+        return [
+            'user' => User::class,
+            'post' => Post::class,
+            'comment' => Comment::class,
+            'like' => Like::class,
+        ];
     }
 }

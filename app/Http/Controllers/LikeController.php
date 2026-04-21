@@ -2,22 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Domains\Post\Services\LikeService;
-use App\Events\NotificationCreated;
+use App\Domains\Post\Actions\LikePost;
+use App\Domains\Post\Actions\UnlikePost;
 use App\Models\Post;
-use Illuminate\Http\Request;
 
 class LikeController extends Controller
 {
-    public function store(Post $post, LikeService $likeService)
+    public function store(Post $post, LikePost $likePost)
     {
-        $likeService->like($post, auth()->user());
+        $likePost->execute($post, auth()->user());
+
+        if (request()->wantsJson()) {
+            return response()->json(['success' => true]);
+        }
+
         return back();
     }
 
-    public function destroy(Post $post, LikeService $likeService)
+    public function destroy(Post $post, UnlikePost $unlikePost)
     {
-        $likeService->unlike($post, auth()->user());
+        $unlikePost->execute($post, auth()->user());
+
+        if (request()->wantsJson()) {
+            return response()->json(['success' => true]);
+        }
+
         return back();
     }
 }

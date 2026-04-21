@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\BelongsToSamePost;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreCommentForm extends FormRequest
@@ -17,13 +19,13 @@ class StoreCommentForm extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'body' => 'required|string|max:2000',
-            'parent_id' => 'nullable|exists:comments,id',
+            'body' => ['required', 'string', 'max:2000'],
+            'parent_id' => ['nullable', 'exists:comments,id', new BelongsToSamePost],
         ];
     }
 }

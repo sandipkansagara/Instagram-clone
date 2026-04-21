@@ -2,19 +2,20 @@
 
 namespace App\Services\Cache;
 
-use App\Models\Profile;
+use App\Models\User;
 use Illuminate\Support\Facades\Cache;
-
 
 class ProfileCacheService
 {
-    public function getByUsername(string $username): mixed
+    public function getByUsername(string $username): User
     {
+        /** @var User */
         return Cache::remember(
             $this->key($username),
             now()->addMinutes(10),
-            fn() =>
-            Profile::where('username', $username)->with('user')->firstOrFail()
+            fn () => User::with('profile')
+                ->whereRelation('profile', 'username', $username)
+                ->firstOrFail(),
         );
     }
 

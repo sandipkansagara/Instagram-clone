@@ -2,41 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use App\Domains\Post\Actions\CreatePostAction;
-use App\Domains\Post\Actions\ShowPost;
+use App\Domains\Post\Actions\CreatePost;
+use App\Domains\Post\Actions\GetPost;
+use App\Domains\Post\Actions\ListPosts;
 use App\Http\Requests\StorePostRequest;
+use App\Http\Resources\PostResource;
 use App\Models\Post;
-use Illuminate\Support\Facades\Redis;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class PostController extends Controller
 {
-    public function index(): Response
+    public function index(ListPosts $listPosts): mixed
     {
-        $posts = auth()->user()->posts()->with('media', 'likes', 'comments.user', 'comments.replies')->latest()->paginate(10);
+        $posts = $listPosts->execute(auth()->user());
 
-        //For each post, we can initialize the like count in Redis for real-time updates
-        foreach ($posts as $post) {
-            Redis::setnx("post:{$post->id}:likes", $post->likes_count);
+        if (request()->wantsJson() && ! request()->hasHeader('X-Inertia')) {
+            return PostResource::collection($posts);
         }
 
-        return Inertia::render('Posts/Index', compact('posts'));
-    }
-    public function store(StorePostRequest $request, CreatePostAction $action)
-    {
-        $data = $request->validated();
-        $action->execute(auth()->user(), $data);
-
-        return redirect()->back();
+        return Inertia::render('Posts/Index', [
+            'posts' => PostResource::collection($posts),
+        ]);
     }
 
-    public function show(Post $post, ShowPost $showPost): Response
+    public function store(StorePostRequest $request, CreatePost $createPost)
     {
-        $post = $showPost->execute($post->id);
+        $post = $createPost->execute(auth()->user(), $request->validated());
+
+        return response()->json($post, 201);
+    }
+
+    public function show(Post $post, GetPost $getPost): Response
+    {
+        $post = $getPost->execute($post->id);
 
         return Inertia::render('Posts/Show', compact('post'));
     }
-    //TODO: Implement update and delete methods for posts with proper cache invalidation
+    // TODO: Implement update and delete methods for posts with proper cache invalidation
 
 }
