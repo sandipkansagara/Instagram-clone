@@ -62,8 +62,6 @@ const Post = ({
         });
     };
 
-    console.log(post)
-
     const toggleLikeErrorMessage = isError ? getLikeErrorMessage(error) : null;
 
     return (

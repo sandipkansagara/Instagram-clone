@@ -10,7 +10,8 @@ const MediaList = ({ mediaList }: { mediaList: Media[] }) => {
     const getGridCols = (mediaCount: number) => {
         if (mediaCount === 1) return 'grid-cols-1';
         if (mediaCount === 2) return 'grid-cols-2';
-        return 'grid-cols-2';
+        if (mediaCount === 3) return 'grid-cols-3';
+        return 'grid-cols-2'; // For 4+, keep 2x2 or adjust as needed
     };
     return (
         <div className={`grid ${getGridCols(mediaList.length)} gap-1`}>

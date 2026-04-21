@@ -13,7 +13,7 @@ const Media = ({ media, index, mediaLength }: Props) => {
             className={`relative overflow-hidden bg-gray-100 dark:bg-gray-900 ${mediaLength === 3 && index === 0 ? 'col-span-2 row-span-2' : ''} ${mediaLength === 1 ? 'max-h-96' : 'aspect-square'}`}
         >
             {media.type.startsWith('image/') ? (
-                <img
+                <img loading="lazy"
                     src={media.url}
                     alt="Post media"
                     className="h-full w-full object-cover"
