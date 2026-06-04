@@ -1,6 +1,6 @@
-import { postKeys } from '@/modules/post/queryKeys';
 import { useQuery } from '@tanstack/react-query';
-import { Post } from '@/modules/post/types';
+import { postKeys } from '@/modules/post/queryKeys';
+import type { Post } from '@/modules/post/types';
 
 
 export const useShowPost = (post: Post) => {

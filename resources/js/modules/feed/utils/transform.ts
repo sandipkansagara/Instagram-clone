@@ -1,5 +1,5 @@
-import { ApiPaginatedResponse, PaginatedResponse } from '@/core/types/api';
-import { FeedItem, FeedItemApi } from '@/modules/feed/types';
+import type { ApiPaginatedResponse, PaginatedResponse } from '@/core/types/api';
+import type { FeedItem, FeedItemApi } from '@/modules/feed/types';
 import { mapPost } from '@/modules/post/utils/transform';
 
 export const mapFeedItem = (feedItemApi: FeedItemApi): FeedItem => {

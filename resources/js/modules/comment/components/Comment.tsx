@@ -1,10 +1,10 @@
-import { Comment as CommentType } from '@/modules/comment/types';
-import CommentHeader from './CommentHeader';
-import ReplyLink from '@/components/links/ReplyLink';
+import { show } from '@/actions/App/Http/Controllers/CommentController';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import ReplyLink from '@/components/links/ReplyLink';
+import type { Comment as CommentType } from '@/modules/comment/types';
+import CommentHeader from './CommentHeader';
 import ReplyForm from './ReplyForm';
 import ReplyList from './ReplyList';
-import { show } from '@/actions/App/Http/Controllers/CommentController';
 
 interface Props {
     comment: CommentType;
@@ -12,8 +12,6 @@ interface Props {
 }
 
 const Comment = ({ comment, replyShow }: Props) => {
-    const avatar = comment.user.profile?.avatar ?? null;
-    const fallback = comment.user.name.charAt(0).toUpperCase();
 
     return (
         <article

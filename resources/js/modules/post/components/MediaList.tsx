@@ -1,5 +1,5 @@
-import { Media as MediaType } from "@/modules/post/types";
 import Media from '@/modules/post/components/Media';
+import type { Media as MediaType } from "@/modules/post/types";
 
 
 const MediaList = ({ mediaList }: { mediaList: MediaType[] }) => {

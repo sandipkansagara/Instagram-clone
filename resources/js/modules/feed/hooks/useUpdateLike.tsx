@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
-import {  FeedItem } from '@/modules/feed/types';
-import { PaginatedResponse } from '@/core/types/api';
-import { Post } from '@/modules/post/types';
+import type { PaginatedResponse } from '@/core/types/api';
+import type {  FeedItem } from '@/modules/feed/types';
+import type { Post } from '@/modules/post/types';
 import { feedKeys } from '../queryKeys';
 
 type QueryData = {

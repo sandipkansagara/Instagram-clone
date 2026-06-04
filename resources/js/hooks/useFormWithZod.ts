@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { z } from 'zod';
+import type { z } from 'zod';
 
 type FormData = Record<string, any>;
 type Errors = Record<string, string>;

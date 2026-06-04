@@ -1,17 +1,16 @@
-import ProfileCard from '@/modules/user/components/ProfileCard';
-import useUsers from '@/modules/user/hooks/useUsers';
+import ErrorBoundary from '@/components/ErrorBoundary';
+import type { ApiPaginatedResponse } from '@/core/types/api';
 import AppLayout from '@/layouts/app-layout';
 import { UserList } from '@/modules/user/components/UserList';
-import ErrorBoundary from '@/components/ErrorBoundary';
-import { ApiPaginatedResponse } from '@/core/types/api';
-import { UserApi } from '@/modules/user/types';
+import useUsers from '@/modules/user/hooks/useUsers';
+import type { UserApi } from '@/modules/user/types';
 
 export interface Props {
     users: ApiPaginatedResponse<UserApi>;
 }
 
 const Index = ({ users: initialUsers }: Props) => {
-    const { data : {flattened: users}, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    const { data : {flattened: users} } =
         useUsers(initialUsers);
 
     return (

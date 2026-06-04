@@ -1,12 +1,8 @@
-import { follow } from '@/routes';
-import posts from '@/routes/posts';
-import { UserApi, User } from '@/types';
 import type { InertiaLinkProps } from '@inertiajs/react';
 import { clsx } from 'clsx';
 import type { ClassValue } from 'clsx';
-import { profile } from 'console';
-import { create } from 'domain';
 import { twMerge } from 'tailwind-merge';
+import type { UserApi, User } from '@/types';
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));

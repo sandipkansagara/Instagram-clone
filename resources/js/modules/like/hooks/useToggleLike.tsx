@@ -1,6 +1,8 @@
+import type { QueryKey} from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
+import axios from 'axios';
 import { destroy, store } from '@/actions/App/Http/Controllers/LikeController';
-import { QueryKey, useMutation, useQueryClient } from '@tanstack/react-query';
-import axios, { AxiosError } from 'axios';
 
 export interface ToggleLikeVars {
     postId: number;

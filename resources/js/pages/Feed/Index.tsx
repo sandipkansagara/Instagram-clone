@@ -1,13 +1,13 @@
 import { useEcho } from '@laravel/echo-react';
-import FeedList from '@/modules/feed/components/FeedList';
 import ErrorBoundary, { ErrorFallback } from '@/components/ErrorBoundary';
+import InfiniteScroll from '@/components/InfiniteScroll';
+import type { ApiPaginatedResponse} from '@/core/types/api';
+import AppLayout from '@/layouts/app-layout';
+import FeedList from '@/modules/feed/components/FeedList';
 import { useFeed } from '@/modules/feed/hooks/useFeed';
 import { useUpdateLikeLive } from '@/modules/feed/hooks/useUpdateLike';
-import AppLayout from '@/layouts/app-layout';
-import { ApiPaginatedResponse, PaginatedResponse } from '@/core/types/api';
-import { FeedItem, FeedItemApi } from '@/modules/feed/types';
-import { Post } from '@/modules/post/types';
-import InfiniteScroll from '@/components/InfiniteScroll';
+import type { FeedItemApi } from '@/modules/feed/types';
+import type { Post } from '@/modules/post/types';
 
 const Index = ({
     feed: feedInitial,

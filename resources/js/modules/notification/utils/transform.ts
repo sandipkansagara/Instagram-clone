@@ -1,5 +1,5 @@
-import { ApiPaginatedResponse, PaginatedResponse } from '@/core/types/api';
-import { Notification, NotificationApi } from '@/modules/notification/types';
+import type { ApiPaginatedResponse, PaginatedResponse } from '@/core/types/api';
+import type { Notification, NotificationApi } from '@/modules/notification/types';
 
 export const mapNotification = (
     notificationApi: NotificationApi,

@@ -1,8 +1,7 @@
-import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import type { ApiPaginatedResponse, PaginatedResponse } from '@/core/types/api';
+import type { Post, PostApi } from '@/modules/post/types';
 import { getPosts } from '../api/post.api';
-import { ApiPaginatedResponse, PaginatedResponse } from '@/core/types/api';
-import { Post, PostApi } from '@/modules/post/types';
-import { tr } from 'zod/v4/locales';
 import { transformFullResponse } from '../utils/transform';
 
 export const usePosts = (initialPosts: ApiPaginatedResponse<PostApi>) => {

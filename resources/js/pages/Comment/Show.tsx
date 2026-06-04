@@ -1,9 +1,8 @@
 import ErrorBoundary from '@/components/ErrorBoundary';
-import { ApiPaginatedResponse } from '@/core/types/api';
 import AppLayout from '@/layouts/app-layout';
 import Comment from '@/modules/comment/components/Comment';
-import { CommentApi } from '@/modules/comment/types';
-import { mapComment, transformFullResponse } from '@/modules/comment/utils/transform';
+import type { CommentApi } from '@/modules/comment/types';
+import { mapComment } from '@/modules/comment/utils/transform';
 
 type Props = {
     comment: CommentApi;

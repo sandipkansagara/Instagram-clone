@@ -1,4 +1,4 @@
-import { User, UserApi } from "@/modules/user/types";
+import type { User, UserApi } from "@/modules/user/types";
 
 export type CommentApi = {
     id: number;

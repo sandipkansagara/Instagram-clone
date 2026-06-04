@@ -1,6 +1,6 @@
 import { Link } from '@inertiajs/react';
-import { PostCardData, PostUser } from './types';
 import { show } from '@/actions/App/Http/Controllers/PostController';
+import type { PostCardData, PostUser } from './types';
 
 interface Props {
     post: PostCardData;
@@ -9,15 +9,6 @@ interface Props {
 
 const PostHeader = ({ post, user }: Props) => {
     const profile = user.profile || {};
-
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-        });
-    };
 
     return (
         <div className="flex items-center gap-3 border-b border-gray-100 p-4 dark:border-gray-700">

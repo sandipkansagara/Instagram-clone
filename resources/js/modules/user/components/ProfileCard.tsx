@@ -1,9 +1,9 @@
+import { UserPlus, UserCheck } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { UserPlus, UserCheck } from 'lucide-react';
 import useToggleFollow from '@/modules/follow/hooks/useToggleFollow';
-import { User } from '@/modules/user/types';
+import type { User } from '@/modules/user/types';
 
 export interface MutationVars{
     userId: number;
@@ -11,7 +11,7 @@ export interface MutationVars{
 }
 
 const ProfileCard = ({ user }: { user: User }) => {
-    const { mutate: toggleFollow, isPending } = useToggleFollow();
+    const { mutate: toggleFollow } = useToggleFollow();
 
     return (
         <Card className="group relative overflow-hidden border-border/50 bg-card transition-all duration-300 hover:shadow-xl">

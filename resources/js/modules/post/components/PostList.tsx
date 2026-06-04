@@ -1,6 +1,6 @@
+import { patchPostsLike } from '@/modules/like/hooks/cache';
 import Post from '@/modules/post/components/Post';
 import type { PostCardData } from '@/components/Post/types';
-import { patchPostsLike } from '@/modules/like/hooks/cache';
 
 interface User {
     name: string;

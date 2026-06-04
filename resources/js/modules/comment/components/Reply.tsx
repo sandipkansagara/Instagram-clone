@@ -1,8 +1,8 @@
-import { Comment as CommentType } from '@/modules/comment/types';
-import CommentHeader from './CommentHeader';
-import ReplyLink from '@/components/links/ReplyLink';
 import { show } from '@/actions/App/Http/Controllers/CommentController';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import ReplyLink from '@/components/links/ReplyLink';
+import type { Comment as CommentType } from '@/modules/comment/types';
+import CommentHeader from './CommentHeader';
 import ReplyForm from './ReplyForm';
 import ReplyList from './ReplyList';
 

@@ -1,10 +1,7 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import { index } from '@/actions/App/Http/Controllers/CommentController';
-import type { CommentItemData } from '@/components/comment/types';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import type { PaginatedResponse } from '@/core/types/api';
 import { commentKeys } from '@/modules/comment/hooks/queryKeys';
-import { PaginatedResponse } from '@/core/types/api';
-import { Comment, CommentApi } from '@/modules/comment/types';
+import type { Comment} from '@/modules/comment/types';
 import { getComments } from '../api/comment.api';
 
 const useComment = (postId: number) => {

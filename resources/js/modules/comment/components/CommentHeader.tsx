@@ -1,7 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { show } from '@/actions/App/Http/Controllers/CommentController';
-import { Comment } from '@/modules/comment/types';
-import { Profile, User } from '@/modules/user/types';
+import type { Comment } from '@/modules/comment/types';
+import type { Profile, User } from '@/modules/user/types';
 
 interface Props {
     comment: Comment;

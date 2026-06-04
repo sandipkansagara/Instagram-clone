@@ -1,10 +1,10 @@
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import InputError from '@/components/input-error';
-import { useCreateComment } from '@/modules/comment/hooks/useCreateComment';
-import { createCommentSchema, type CreateCommentData } from '@/lib/schemas';
+import { createCommentSchema  } from '@/lib/schemas';
+import type {CreateCommentData} from '@/lib/schemas';
 import { useCreateReply } from '../hooks/useCreateReply';
 
 const ReplyForm = ({ id }: { id: number }) => {

@@ -14,11 +14,11 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import type { NavItem } from '@/types';
-import posts from '@/routes/posts';
 import feed from '@/routes/feed';
 import notifications from '@/routes/notifications';
+import posts from '@/routes/posts';
 import users from '@/routes/users';
+import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
     {

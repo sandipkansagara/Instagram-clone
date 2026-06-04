@@ -1,18 +1,18 @@
 import type { QueryKey } from '@tanstack/react-query';
+import { show } from '@/actions/App/Http/Controllers/PostController';
 import AlertError from '@/components/alert-error';
+import LikeButton from '@/components/buttons/LikeButton';
 import CommentForm from '@/modules/comment/components/CommentForm';
 import CommentList from '@/modules/comment/components/CommentList';
-import LikeButton from '@/components/buttons/LikeButton';
 import type { ToggleLikeVars } from '@/modules/like/hooks/useToggleLike';
 import { useToggleLike } from '@/modules/like/hooks/useToggleLike';
-import CommentLink from '../../../components/links/CommentLink';
+import type { Post as PostType } from '@/modules/post/types';
+import type { User } from '@/modules/user/types';
 import ShareButton from '../../../components/buttons/ShareButton';
+import ErrorBoundary from '../../../components/ErrorBoundary';
+import CommentLink from '../../../components/links/CommentLink';
 import MediaList from './MediaList';
 import PostHeader from './PostHeader';
-import { show } from '@/actions/App/Http/Controllers/PostController';
-import ErrorBoundary from '../../../components/ErrorBoundary';
-import { Post as PostType } from '@/modules/post/types';
-import { User } from '@/modules/user/types';
 
 const getLikeErrorMessage = (error: unknown): string => {
     if (error instanceof Error) {
@@ -44,7 +44,6 @@ const Post = <TQueryData,>({
     patchQueryData,
     commentShow = false,
 }: Props<TQueryData>) => {
-    const profile = user?.profile || {};
 
     const {
         mutate: toggleLike,

@@ -1,6 +1,6 @@
-import { ApiPaginatedResponse, PaginatedResponse } from '@/core/types/api';
-import { Comment, CommentApi } from '@/modules/comment/types';
-import {
+import type { ApiPaginatedResponse, PaginatedResponse } from '@/core/types/api';
+import type { Comment, CommentApi } from '@/modules/comment/types';
+import type {
     Media,
     MediaApi,
     PostApi,

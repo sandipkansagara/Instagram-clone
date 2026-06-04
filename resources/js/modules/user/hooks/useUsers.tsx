@@ -1,8 +1,8 @@
-import { index } from '@/actions/App/Http/Controllers/UserController';
-import { ApiPaginatedResponse, PaginatedResponse } from '@/core/types/api';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { User, UserApi } from '@/modules/user/types';
+import { index } from '@/actions/App/Http/Controllers/UserController';
+import type { ApiPaginatedResponse, PaginatedResponse } from '@/core/types/api';
+import type { User, UserApi } from '@/modules/user/types';
 import { transformFullResponse } from '@/modules/user/utils/Transform';
 
 export const useUsers = (initialUsers: ApiPaginatedResponse<UserApi>) => {

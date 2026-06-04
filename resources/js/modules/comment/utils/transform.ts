@@ -1,6 +1,6 @@
-import { ApiPaginatedResponse, PaginatedResponse } from "@/core/types/api";
-import { Comment, CommentApi } from "../types";
+import type { ApiPaginatedResponse, PaginatedResponse } from "@/core/types/api";
 import { mapUser } from "@/modules/user/utils/Transform";
+import type { Comment, CommentApi } from "../types";
 
 export const mapComment = (commentApi: CommentApi): Comment => {
     return {

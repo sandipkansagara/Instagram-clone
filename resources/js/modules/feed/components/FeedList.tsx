@@ -1,7 +1,7 @@
 import ErrorBoundary from '@/components/ErrorBoundary';
+import type { FeedItem } from '@/modules/feed/types';
 import { patchFeedLike } from '@/modules/like/hooks/cache';
 import Post from '@/modules/post/components/Post';
-import { FeedItem } from '@/modules/feed/types';
 
 type Props = {
     feed: FeedItem[];

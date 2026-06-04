@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import type { z } from 'zod';
 
 // HTML entities to prevent XSS in plain text rendering
 const DANGEROUS_PATTERNS = [

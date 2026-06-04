@@ -1,4 +1,5 @@
-import { Component, ErrorInfo, ReactNode } from 'react';
+import type { ErrorInfo, ReactNode } from 'react';
+import { Component } from 'react';
 
 interface ErrorBoundaryProps {
     children: ReactNode;
@@ -54,7 +55,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
     }
 
     public componentDidCatch(error: Error, info: ErrorInfo): void {
-        // eslint-disable-next-line no-console
+         
         console.error('Uncaught error in ErrorBoundary:', error, info);
     }
 

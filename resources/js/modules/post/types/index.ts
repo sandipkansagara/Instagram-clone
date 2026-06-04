@@ -1,5 +1,5 @@
-import { Comment, CommentApi } from "@/modules/comment/types";
-import { User, UserApi } from "@/modules/user/types";
+import type { Comment, CommentApi } from "@/modules/comment/types";
+import type { User, UserApi } from "@/modules/user/types";
 
 export type MediaApi = {
     id: number;

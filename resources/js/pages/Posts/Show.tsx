@@ -1,9 +1,9 @@
+import AppLayout from '@/layouts/app-layout';
+import { patchSinglePostLike } from '@/modules/like/hooks/cache';
 import Post from '@/modules/post/components/Post';
 import { useShowPost } from '@/modules/post/hooks/useShowPost';
-import { patchSinglePostLike } from '@/modules/like/hooks/cache';
 import { postKeys } from '@/modules/post/queryKeys';
-import AppLayout from '@/layouts/app-layout';
-import { Post as PostType } from '@/modules/post/types';
+import type { Post as PostType } from '@/modules/post/types';
 
 interface ShowProps {
     post: PostType;

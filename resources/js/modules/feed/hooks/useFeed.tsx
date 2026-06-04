@@ -1,9 +1,9 @@
-import { ApiPaginatedResponse, PaginatedResponse } from '@/core/types/api';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { FeedItem, FeedItemApi } from '../types';
+import type { ApiPaginatedResponse, PaginatedResponse } from '@/core/types/api';
 import { getFeed } from '@/modules/feed/api/feed.api';
 import { feedKeys } from '@/modules/feed/queryKeys';
 import { transformFullResponse } from '@/modules/feed/utils/transform';
+import type { FeedItem, FeedItemApi } from '../types';
 
 type PageParam = { cursor?: string; max_id?: number } | undefined;
 

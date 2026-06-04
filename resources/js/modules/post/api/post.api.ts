@@ -1,13 +1,13 @@
-import { fetcher, fetcherPaginated } from '@/core/api/fetcher';
-import { Post } from '../types';
-import apiClient from '@/core/api/client';
 import {
     index,
     show,
     store,
 } from '@/actions/App/Http/Controllers/PostController';
-import { PaginatedResponse } from '@/core/types/api';
+import apiClient from '@/core/api/client';
+import { fetcher, fetcherPaginated } from '@/core/api/fetcher';
+import type { PaginatedResponse } from '@/core/types/api';
 import { transformFullResponse } from '@/modules/post/utils/transform';
+import type { Post } from '../types';
 
 export const getPosts = async (
     cursor?: string,

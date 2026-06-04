@@ -1,6 +1,6 @@
-import { ApiPaginatedResponse, PaginatedResponse } from '@/core/types/api';
+import type { ApiPaginatedResponse, PaginatedResponse } from '@/core/types/api';
 
-import { User, UserApi, Profile, ProfileApi } from '@/modules/user/types';
+import type { User, UserApi, Profile, ProfileApi } from '@/modules/user/types';
 
 export const mapUser = (userApi: UserApi): User => {
     return {

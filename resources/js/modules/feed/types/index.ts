@@ -1,4 +1,4 @@
-import { Post, PostApi } from '@/modules/post/types';
+import type { Post, PostApi } from '@/modules/post/types';
 
 export type FeedItemApi = {
     id: number;

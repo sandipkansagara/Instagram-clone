@@ -1,9 +1,9 @@
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useCreatePost } from '@/modules/post/hooks/useCreatePost';
-import { createPostSchema, type CreatePostData } from '@/lib/schemas';
+import { useForm, useWatch } from 'react-hook-form';
 import InputError from '@/components/input-error';
-import { useRef } from 'react';
+import { createPostSchema  } from '@/lib/schemas';
+import type {CreatePostData} from '@/lib/schemas';
+import { useCreatePost } from '@/modules/post/hooks/useCreatePost';
 
 export default function PostForm() {
     const {
@@ -11,13 +11,17 @@ export default function PostForm() {
         handleSubmit,
         formState: { errors },
         setValue,
-        watch,
+        control
     } = useForm<CreatePostData>({
         resolver: zodResolver(createPostSchema),
+        defaultValues: {
+            caption: '',
+            media: []
+        }
     });
 
     const { mutate: createPost, isPending } = useCreatePost();
-    const mediaFiles = watch('media') || [];
+    const mediaFiles = useWatch({ control, name: 'media' }) || [];
 
     const onSubmit = (data: CreatePostData) => {
         const formData = new FormData();

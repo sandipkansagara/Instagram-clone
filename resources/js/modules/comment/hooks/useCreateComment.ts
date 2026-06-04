@@ -1,11 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios, { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 import { store } from '@/actions/App/Http/Controllers/CommentController';
+import { isRateLimitError, parseRateLimitError } from '@/lib/validation';
 import { commentKeys } from '@/modules/comment/hooks/queryKeys';
 import { postKeys } from '@/modules/post/queryKeys';
-import { isRateLimitError, parseRateLimitError } from '@/lib/validation';
-import { toast } from 'react-hot-toast';
-import { Post } from '@/modules/post/types';
+import type { Post } from '@/modules/post/types';
 
 interface CreateCommentInput {
     postId: number;

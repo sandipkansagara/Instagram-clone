@@ -1,4 +1,4 @@
-import { QueryClient } from '@tanstack/react-query';
+import type { QueryClient } from '@tanstack/react-query';
 
 /**
  * Common cache update utilities for optimistic updates and server data synchronization

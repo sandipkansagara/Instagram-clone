@@ -1,10 +1,11 @@
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import InputError from '@/components/input-error';
+import { createCommentSchema  } from '@/lib/schemas';
+import type {CreateCommentData} from '@/lib/schemas';
 import { useCreateComment } from '@/modules/comment/hooks/useCreateComment';
-import { createCommentSchema, type CreateCommentData } from '@/lib/schemas';
 
 const CommentForm = ({ postId }: { postId: number }) => {
     const {

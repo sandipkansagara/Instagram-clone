@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { store } from '@/actions/App/Http/Controllers/PostController';
-import axios, { AxiosError } from 'axios';
-import { isRateLimitError, parseRateLimitError } from '@/lib/validation';
+import type { AxiosError } from 'axios';
+import axios from 'axios';
 import toast from 'react-hot-toast';
-import { Post } from '@/modules/post/types';
+import { store } from '@/actions/App/Http/Controllers/PostController';
+import type { PaginatedResponse } from '@/core/types/api';
+import { isRateLimitError, parseRateLimitError } from '@/lib/validation';
+import type { Post } from '@/modules/post/types';
 import { postKeys } from '../queryKeys';
-import { PaginatedResponse } from '@/core/types/api';
-import { User } from '@/types';
 
 export type QueryData = {
         pages: PaginatedResponse<Post>[] | undefined;

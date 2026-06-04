@@ -1,22 +1,9 @@
-import { index } from '@/actions/App/Http/Controllers/NotificationController';
-import { ApiPaginatedResponse } from '@/core/types/api';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { NotificationApi } from '../types';
+import { index } from '@/actions/App/Http/Controllers/NotificationController';
+import type { ApiPaginatedResponse } from '@/core/types/api';
 import { transformFullResponse } from '@/modules/notification/utils/transform';
-
-interface Notification {
-    id: number | string;
-    message: string | null;
-    url: string | null;
-    actor_name: string | null;
-    created_at: string;
-}
-
-interface NotificationsData {
-    data: Notification[];
-    next_cursor: string | null;
-}
+import type { NotificationApi } from '../types';
 
 export const useNotification = (notificationsInitial: ApiPaginatedResponse<NotificationApi>) => {
     const flattenedNotifications = transformFullResponse(notificationsInitial);

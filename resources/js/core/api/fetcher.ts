@@ -1,4 +1,4 @@
-import { ApiErrorResponse, ApiPaginatedResponse, ApiResponse } from '../types/api';
+import type { ApiPaginatedResponse, ApiResponse } from '../types/api';
 
 export const fetcher = async <T, R = T>
     (

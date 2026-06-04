@@ -1,6 +1,5 @@
-import Comment from '@/modules/comment/components/Comment';
-import { Comment as CommentType } from '@/modules/comment/types';
 import useReply from '@/modules/comment/hooks/useReply';
+import type { Comment as CommentType } from '@/modules/comment/types';
 import Reply from './Reply';
 
 const ReplyList = ({ id }: { id: number }) => {

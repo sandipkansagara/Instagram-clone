@@ -1,4 +1,4 @@
-import { Media as MediaType } from "./types";
+import type { Media as MediaType } from "./types";
 
 interface Props {
     media: MediaType;

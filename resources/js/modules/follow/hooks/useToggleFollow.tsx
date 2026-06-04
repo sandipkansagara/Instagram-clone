@@ -1,8 +1,9 @@
-import { PaginatedResponse } from '@/core/types/api';
-import { MutationVars } from '@/modules/user/components/ProfileCard';
-import { User } from '@/modules/user/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios, { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
+import axios from 'axios';
+import type { PaginatedResponse } from '@/core/types/api';
+import type { MutationVars } from '@/modules/user/components/ProfileCard';
+import type { User } from '@/modules/user/types';
 
 interface QueryData {
     pages: PaginatedResponse<User>[];

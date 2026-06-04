@@ -1,12 +1,12 @@
+import { usePage } from '@inertiajs/react';
+import InfiniteScroll from '@/components/InfiniteScroll';
+import type { ApiPaginatedResponse } from '@/core/types/api';
 import AppLayout from '@/layouts/app-layout';
 import PostList from '@/modules/post/components/PostList';
-import { usePage } from '@inertiajs/react';
-import Create from './Create';
 import { usePosts } from '@/modules/post/hooks/usePosts';
-import InfiniteScroll from '@/components/InfiniteScroll';
-import { User, Profile } from '@/modules/user/types';
-import { ApiPaginatedResponse } from '@/core/types/api';
-import {PostApi } from '@/modules/post/types';
+import type {PostApi } from '@/modules/post/types';
+import type { User, Profile } from '@/modules/user/types';
+import Create from './Create';
 
 interface Props {
     posts: ApiPaginatedResponse<PostApi>;

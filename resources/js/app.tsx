@@ -1,13 +1,13 @@
 import { createInertiaApp } from '@inertiajs/react';
+import { configureEcho } from '@laravel/echo-react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Toaster } from 'react-hot-toast';
 import '../css/app.css';
-import { initializeTheme } from '@/hooks/use-appearance';
-import { configureEcho } from '@laravel/echo-react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import { initializeTheme } from '@/hooks/use-appearance';
 
 const queryClient = new QueryClient();
 

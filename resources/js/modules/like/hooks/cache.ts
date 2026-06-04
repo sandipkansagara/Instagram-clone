@@ -1,6 +1,6 @@
-import { PaginatedResponse } from "@/core/types/api";
-import { FeedItem } from "@/modules/feed/types";
-import { Post } from "@/modules/post/types";
+import type { PaginatedResponse } from "@/core/types/api";
+import type { FeedItem } from "@/modules/feed/types";
+import type { Post } from "@/modules/post/types";
 
 type ToggleLikeVars = {
     postId: number;

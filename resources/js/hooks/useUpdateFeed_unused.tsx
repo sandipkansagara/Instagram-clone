@@ -1,9 +1,9 @@
 
-import { store, destroy } from '@/actions/App/Http/Controllers/LikeController';
-import { mutationVars, Feed, FeedItem } from '@/pages/Feed/Index';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { FeedQueryData } from '@/types/queries';
 import axios from 'axios';
+import { store, destroy } from '@/actions/App/Http/Controllers/LikeController';
+import type { mutationVars, Feed, FeedItem } from '@/pages/Feed/Index';
+import type { FeedQueryData } from '@/types/queries';
 
 export const useUpdateFeed = () => {
     const queryClient = useQueryClient();

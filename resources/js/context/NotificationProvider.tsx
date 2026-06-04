@@ -1,7 +1,7 @@
-import { Notification } from '@/pages/Notifications/Index';
 import { usePage } from '@inertiajs/react';
 import { useEchoNotification } from '@laravel/echo-react';
 import { useQueryClient } from '@tanstack/react-query';
+import type { Notification } from '@/pages/Notifications/Index';
 
 interface Page {
     data: Notification[];

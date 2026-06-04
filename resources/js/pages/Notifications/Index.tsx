@@ -1,10 +1,10 @@
-import { useNotification } from '@/modules/notification/hooks/useNotification';
-import AppLayout from '@/layouts/app-layout';
 import { Link } from '@inertiajs/react';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { ApiPaginatedResponse } from '@/core/types/api';
-import { Notification, NotificationApi } from '@/modules/notification/types';
+import type { ApiPaginatedResponse } from '@/core/types/api';
+import AppLayout from '@/layouts/app-layout';
+import { useNotification } from '@/modules/notification/hooks/useNotification';
+import type { Notification, NotificationApi } from '@/modules/notification/types';
 
 type Props = {
     notifications: ApiPaginatedResponse<NotificationApi>;
