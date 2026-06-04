@@ -1,36 +1,19 @@
-import ProfileCard from '@/components/User/ProfileCard';
-import useUsers from '@/hooks/Follow/useUsers';
+import ProfileCard from '@/modules/user/components/ProfileCard';
+import useUsers from '@/modules/user/hooks/useUsers';
 import AppLayout from '@/layouts/app-layout';
-
-export interface User {
-    id: number;
-    name: string;
-    isFollowing: boolean;
-    profile: {
-        username: string;
-        avatar: string;
-        bio: string;
-        following_count: number;
-        followers_count: number;
-    };
-}
-
-export interface UserData {
-    data: User[];
-    next_cursor: string | null;
-    prev_cursor: string | null;
-}
+import { UserList } from '@/modules/user/components/UserList';
+import ErrorBoundary from '@/components/ErrorBoundary';
+import { ApiPaginatedResponse } from '@/core/types/api';
+import { UserApi } from '@/modules/user/types';
 
 export interface Props {
-    users: UserData;
+    users: ApiPaginatedResponse<UserApi>;
 }
 
-const Index = ({ users }: Props) => {
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-        useUsers(users);
+const Index = ({ users: initialUsers }: Props) => {
+    const { data : {flattened: users}, fetchNextPage, hasNextPage, isFetchingNextPage } =
+        useUsers(initialUsers);
 
-    const flattenedUsers =
-        data?.pages.flatMap((page) => page.data) || ([] as User[]);
     return (
         <AppLayout>
             <div className="min-h-screen bg-background p-8">
@@ -45,9 +28,9 @@ const Index = ({ users }: Props) => {
                     </header>
 
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        {flattenedUsers.map((user, i) => (
-                            <ProfileCard key={user.id} user={user} />
-                        ))}
+                        <ErrorBoundary>
+                            <UserList users={users} />
+                        </ErrorBoundary>
                     </div>
                 </div>
             </div>

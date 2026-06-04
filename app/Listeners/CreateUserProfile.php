@@ -20,6 +20,10 @@ class CreateUserProfile
      */
     public function handle(Registered $event): void
     {
+        /**
+         * @var \App\Models\User $user
+         */
+        
         $user = $event->user;
         $user->profile()->create([
             'username' => Str::slug($user->name) . rand(100, 999)

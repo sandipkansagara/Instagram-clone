@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\User;
+use App\Models\Media;
+use App\Models\Like;
+
+
 
 class Post extends Model
 {
@@ -38,7 +42,7 @@ class Post extends Model
 
     public function isLikedBy(?User $user): bool
     {
-        if (! $user) {
+        if (!$user) {
             return false;
         }
 
@@ -49,6 +53,7 @@ class Post extends Model
         return $this->likes()->where('user_id', $user->id)->exists();
     }
 
+   
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class)->whereNull('parent_id');

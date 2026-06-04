@@ -15,7 +15,8 @@ class NotificationPresenter
      *   subject_id?: int|string|null,
      *   subject_type?: string|null,
      *   target_id?: int|string|null,
-     *   target_type?: string|null
+     *   target_type?: string|null,
+     *   created_at?: string
      * }  $data
      * @return array{id?: string, message: string, url: string, actor_name: string|null, created_at?: string}
      */

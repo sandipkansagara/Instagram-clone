@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -35,14 +36,20 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        UserResource::withoutWrapping();
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
-                'user' => $request->user(),
-                'profile' => $request->user()?->profile,
+                'user' => function () use ($request) {
+                    if (!$request->user()) {
+                        return null;
+                    }
+                    return new UserResource($request->user()->load('profile'));
+                },
+                //'profile' => $request->user()?->profile,
             ],
-            'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'sidebarOpen' => !$request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }
 }

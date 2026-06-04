@@ -1,0 +1,273 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: nginx-config
+data:
+    default.conf: |
+        server {
+            listen 80;
+            index index.php index.html;
+            root /var/www/html/public;
+
+            location / {
+                try_files $uri $uri/ /index.php?$query_string;
+            }
+
+            location ~ \.php$ {
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                fastcgi_pass 127.0.0.1:9000;
+                fastcgi_index index.php;
+                include fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                fastcgi_param PATH_INFO $fastcgi_path_info;
+            }
+        }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: laravel-config
+data:
+    APP_ENV: local
+    APP_KEY: base64:iNFgn3KAYs4mrczCQYgmLMJoiTRsR9ab2zw5ygnHx1I= # Make sure this matches your actual APP_KEY
+    APP_DEBUG: 'true'
+    DB_CONNECTION: mysql
+    DB_HOST: mysql-primary
+    DB_PORT: '3306'
+    DB_READ_HOST: mysql-replica
+    DB_DATABASE: instagram_db
+    DB_USERNAME: root
+    DB_PASSWORD: password
+    REDIS_HOST: redis
+    REDIS_PORT: '6379'
+    REVERB_APP_ID: "424154"
+    REVERB_APP_KEY: "eegrcgwlcaxtqdxipkb6"
+    REVERB_APP_SECRET: "jqmwmhcz6a4ibqpw39hj"
+    REVERB_HOST: "0.0.0.0"
+    REVERB_PORT: "8090"
+    REVERB_SCHEME: "http"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: mysql-primary-pvc
+spec:
+    accessModes:
+        - ReadWriteOnce
+    resources:
+        requests:
+            storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: mysql-replica-pvc
+spec:
+    accessModes:
+        - ReadWriteOnce
+    resources:
+        requests:
+            storage: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: redis
+spec:
+    ports:
+        - port: 6379
+    selector:
+        app: redis
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: redis
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: redis
+    template:
+        metadata:
+            labels:
+                app: redis
+        spec:
+            containers:
+                - name: redis
+                  image: redis:alpine
+                  ports:
+                      - containerPort: 6379
+---
+---
+# MySQL Primary Service and Deployment
+apiVersion: v1
+kind: Service
+metadata:
+    name: mysql-primary
+spec:
+    ports:
+        - port: 3306
+    selector:
+        app: mysql-primary
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: mysql-primary
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: mysql-primary
+    template:
+        metadata:
+            labels:
+                app: mysql-primary
+        spec:
+            containers:
+                - name: mysql-primary
+                  image: mysql:9
+                  env:
+                      - name: MYSQL_ROOT_PASSWORD
+                        value: password
+                      - name: MYSQL_DATABASE
+                        value: instagram_db
+                      - name: MYSQL_USER
+                        value: repl_user
+                      - name: MYSQL_PASSWORD
+                        value: password
+                  args:
+                      - '--server-id=1'
+                      - '--log-bin=mysql-bin'
+                      - '--gtid-mode=ON'
+                      - '--enforce-gtid-consistency=ON'
+                  ports:
+                      - containerPort: 3306
+                  volumeMounts:
+                      - name: mysql-primary-storage
+                        mountPath: /var/lib/mysql
+                      - name: init-scripts-volume
+                        mountPath: /docker-entrypoint-initdb.d/init-primary.sql
+                        subPath: init-primary.sql
+            volumes:
+                - name: mysql-primary-storage
+                  persistentVolumeClaim:
+                      claimName: mysql-primary-pvc
+                - name: init-scripts-volume
+                  configMap:
+                      name: mysql-init-scripts
+---
+# MySQL Replica Service and Deployment
+apiVersion: v1
+kind: Service
+metadata:
+    name: mysql-replica
+spec:
+    ports:
+        - port: 3306
+    selector:
+        app: mysql-replica
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: mysql-replica
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: mysql-replica
+    template:
+        metadata:
+            labels:
+                app: mysql-replica
+        spec:
+            containers:
+                - name: mysql-replica
+                  image: mysql:9
+                  env:
+                      - name: MYSQL_ROOT_PASSWORD
+                        value: password
+                  args:
+                      - '--server-id=2'
+                      - '--relay-log=mysql-relay-bin'
+                      - '--read-only=1'
+                      - '--gtid-mode=ON'
+                      - '--enforce-gtid-consistency=ON'
+                  ports:
+                      - containerPort: 3306
+                  volumeMounts:
+                      - name: mysql-replica-storage
+                        mountPath: /var/lib/mysql
+                      - name: init-scripts-volume
+                        mountPath: /docker-entrypoint-initdb.d/init-replica.sh
+                        subPath: init-replica.sh
+            volumes:
+                - name: mysql-replica-storage
+                  persistentVolumeClaim:
+                      claimName: mysql-replica-pvc
+                - name: init-scripts-volume
+                  configMap:
+                      name: mysql-init-scripts
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: laravel-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: laravel-app
+  template:
+    metadata:
+      labels:
+        app: laravel-app
+    spec:
+      containers:
+        # 1. PHP-FPM Application Container
+        - name: app
+          image: instagram-app:local
+          imagePullPolicy: Never
+          lifecycle:
+            postStart:
+              exec:
+                command: ["sh", "-c", "cp -a /var/www/html/. /shared-workspace/"]
+          ports:
+            - containerPort: 9000
+          envFrom:
+            - configMapRef:
+                name: laravel-config
+          volumeMounts:
+            - name: code-sharing-volume
+              mountPath: /shared-workspace
+
+        # 2. Laravel Reverb WebSocket Container (NEW)
+        - name: reverb
+          image: instagram-app:local
+          imagePullPolicy: Never
+          command: ["php", "artisan", "reverb:start", "--host=0.0.0.0", "--port=8090", "--debug"]
+          ports:
+            - containerPort: 8090
+          envFrom:
+            - configMapRef:
+                name: laravel-config
+
+        # 3. Nginx Web Server Container
+        - name: web
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-config-volume
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
+            - name: code-sharing-volume
+              mountPath: /var/www/html
+      volumes:
+        - name: nginx-config-volume
+          configMap:
+            name: nginx-config
+        - name: code-sharing-volume
+          emptyDir: {}

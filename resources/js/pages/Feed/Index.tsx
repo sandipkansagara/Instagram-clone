@@ -1,58 +1,32 @@
 import { useEcho } from '@laravel/echo-react';
-import FeedList from '@/components/Feed/FeedList';
+import FeedList from '@/modules/feed/components/FeedList';
 import ErrorBoundary, { ErrorFallback } from '@/components/ErrorBoundary';
-import { useFeed } from '@/hooks/useFeed';
-import { useUpdateLike } from '@/hooks/useUpdateLike';
+import { useFeed } from '@/modules/feed/hooks/useFeed';
+import { useUpdateLikeLive } from '@/modules/feed/hooks/useUpdateLike';
 import AppLayout from '@/layouts/app-layout';
+import { ApiPaginatedResponse, PaginatedResponse } from '@/core/types/api';
+import { FeedItem, FeedItemApi } from '@/modules/feed/types';
+import { Post } from '@/modules/post/types';
+import InfiniteScroll from '@/components/InfiniteScroll';
 
-interface User {
-    id?: number;
-    name: string;
-    profile?: {
-        avatar?: string | null;
-    };
-}
+const Index = ({
+    feed: feedInitial,
+}: {
+    feed: ApiPaginatedResponse<FeedItemApi>;
+}) => {
+    const {
+        data: { flattened: feed },
+        error,
+        isError,
+        hasNextPage,
+        isFetchingNextPage,
+        fetchNextPage,
+        refetch,
+    } = useFeed(feedInitial);
+    const updateLike = useUpdateLikeLive();
 
-export interface Media {
-    id: number;
-    type: string;
-    url: string;
-}
-
-export interface Post {
-    id: number;
-    user: User;
-    caption?: string | null;
-    media: Media[];
-    likes_count?: number;
-    isLiked?: boolean;
-    comments_count?: number;
-    created_at: string;
-}
-
-export interface mutationVars {
-    postId: number;
-    isLiked: boolean;
-    signal: AbortSignal;
-}
-
-export interface FeedItem {
-    id: number;
-    created_at: string;
-    post: Post;
-}
-
-export interface Feed {
-    data: FeedItem[];
-    next_cursor?: string | null;
-}
-
-const Index = ({ feed }: { feed: Feed }) => {
-    const { data, error, isError, refetch } = useFeed(feed);
-    const updateLike = useUpdateLike();
-
-    useEcho('post-feed', 'PostLikedToggled', (e: any) => {
-        updateLike(e.post);
+    useEcho<{ post: Post }>('post-feed', 'PostLikedToggled', (payload) => {
+        updateLike(payload.post);
     });
 
     if (isError) {
@@ -65,12 +39,12 @@ const Index = ({ feed }: { feed: Feed }) => {
         );
     }
 
-    const flattenedFeed = data?.pages.flatMap((page) => page.data) ?? [];
-
     return (
         <AppLayout>
             <ErrorBoundary>
-                <FeedList feed={flattenedFeed} />
+                <InfiniteScroll hasNextPage={hasNextPage} isFetchingNextPage={isFetchingNextPage} fetchNextPage={fetchNextPage}>
+                    <FeedList feed={feed} />
+                </InfiniteScroll>
             </ErrorBoundary>
         </AppLayout>
     );

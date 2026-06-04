@@ -17,8 +17,8 @@ class GetPost
                 'user.profile',
                 'media',
                 'likes',
-                'comments.user.profile',
-                'comments.replies',
+                //'comments.user.profile',
+                //'comments.replies',
             ])->findOrFail($postId)
         );
     }

@@ -1,63 +1,31 @@
 import AppLayout from '@/layouts/app-layout';
-import PostList from '@/components/Post/PostList';
-import { Link, usePage } from '@inertiajs/react';
+import PostList from '@/modules/post/components/PostList';
+import { usePage } from '@inertiajs/react';
 import Create from './Create';
-import { usePost } from '@/hooks/Post/usePost';
+import { usePosts } from '@/modules/post/hooks/usePosts';
 import InfiniteScroll from '@/components/InfiniteScroll';
+import { User, Profile } from '@/modules/user/types';
+import { ApiPaginatedResponse } from '@/core/types/api';
+import {PostApi } from '@/modules/post/types';
 
-interface User {
-    id: number;
-    name: string;
+interface Props {
+    posts: ApiPaginatedResponse<PostApi>;
 }
 
-interface Media {
-    id: number;
-    type: string;
-    url: string;
-}
-
-export interface Post {
-    id: number;
-    user_id: number;
-    caption: string;
-    created_at: string;
-    media: Media[] | [];
-    likes_count: number;
-    isLiked: boolean;
-    comments_count: number;
-}
-
-export interface PostsData {
-    data: Post[];
-    meta: {
-        next_cursor: string | null;
-    };
-}
-
-interface Profile {
-    id: number;
-    user_id: number;
-    bio?: string | null;
-    avatar?: string | null;
-    followers_count: number;
-    following_count: number;
-    posts_count: number;
-}
-
-const Index = () => {
+const Index = ({ posts:initialPosts } : Props) => {
     const {
-        posts,
         auth: { user, profile },
-    } = usePage<{ posts: PostsData; auth: { user: User; profile: Profile } }>()
+    } = usePage<{auth: { user: User; profile: Profile } }>()
         .props;
 
     const {
-        data: postsData,
+        data: { flattened: posts},
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
-    } = usePost(posts);
-    const postsList = postsData?.pages.flatMap((page) => page.data) ?? [];
+    } = usePosts(initialPosts);
+
+    console.log(hasNextPage)
 
     return (
         <AppLayout>
@@ -69,7 +37,7 @@ const Index = () => {
                         My Posts
                     </h1>
 
-                    {postsList.length === 0 ? (
+                    {posts.length === 0 ? (
                         <div className="rounded-lg bg-white p-8 text-center shadow-sm dark:bg-gray-800">
                             <p className="text-gray-500 dark:text-gray-400">
                                 No posts yet. Create your first post above!
@@ -83,7 +51,7 @@ const Index = () => {
                                 fetchNextPage={fetchNextPage}
                             >
                                 <PostList
-                                    posts={postsList}
+                                    posts={posts}
                                     user={user}
                                     profile={profile}
                                 />

@@ -24,7 +24,7 @@ class StorePostRequest extends FormRequest
     {
         return [
             'caption' => 'required|string|max:255',
-            'media.*' => 'required|file|image|max:10240',
+            'media.*' => 'required|file|image|video|max:10240',
         ];
     }
 }

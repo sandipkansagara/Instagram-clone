@@ -35,6 +35,14 @@ class AppServiceProvider extends ServiceProvider
         //     }
         // });
 
+        \DB::listen(function ($query) {
+            logger()->info('SQL Query Executed', [
+                'sql' => $query->sql,
+                'bindings' => $query->bindings,
+                'time_ms' => $query->time,
+            ]);
+        });
+
         $this->configureDefaults();
         Relation::enforceMorphMap($this->morphMapModels());
     }

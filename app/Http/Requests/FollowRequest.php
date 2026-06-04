@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
@@ -12,12 +13,18 @@ class FollowRequest extends FormRequest
         return true;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function rules(): array
     {
         return [
         ];
     }
 
+    /**
+     * @return array<int, Closure>
+     */
     public function after(): array
     {
         return [

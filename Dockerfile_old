@@ -1,0 +1,82 @@
+# Stage 1: Install Composer Dependencies
+FROM composer:2.7 as vendor
+WORKDIR /app
+COPY database/ database/
+COPY composer.json composer.lock ./
+RUN composer install --ignore-platform-reqs --no-interaction --no-plugins --no-scripts --prefer-dist
+
+# Stage 2: Compile Inertia React Frontend Assets
+FROM node:20-alpine as frontend
+WORKDIR /app
+
+# 1. Install PHP 8.4 CLI and core extensions required to boot Laravel
+RUN apk add --no-cache --repository=http://alpinelinux.org \
+    php84 \
+    php84-cli \
+    php84-mbstring \
+    php84-openssl \
+    php84-xml \
+    php84-dom \
+    php84-curl \
+    php84-tokenizer \
+    php84-pdo \
+    php84-pdo_mysql \
+    php84-session
+
+RUN ln -sf /usr/bin/php84 /usr/bin/php
+
+# 2. Re-create the required storage structure that Laravel needs to boot up
+RUN mkdir -p storage/framework/cache/data \
+             storage/framework/sessions \
+             storage/framework/views \
+             storage/framework/testing \
+             bootstrap/cache
+
+# 3. Copy files required for the asset build and Artisan scanning
+COPY package.json package-lock.json vite.config.ts tsconfig.json composer.json ./
+COPY artisan ./
+COPY app/ app/
+COPY bootstrap/ bootstrap/
+COPY config/ config/
+COPY routes/ routes/
+COPY resources/ resources/
+
+# 4. Install npm dependencies and vendor files
+RUN npm ci
+COPY --from=vendor /app/vendor ./vendor
+
+RUN DB_CONNECTION=sqlite DB_DATABASE=:memory: php artisan wayfinder:generate --with-form
+
+# 5. Run the build (Wayfinder will now generate the types smoothly)
+RUN npm run build
+
+# Stage 3: Final Production PHP-FPM Image (Already on PHP 8.4)
+FROM php:8.4-fpm-alpine
+RUN apk add --no-cache unzip libpng-dev libzip-dev libjpeg-turbo-dev freetype-dev
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-install pdo_mysql gd zip bcmath
+
+RUN apk add --no-cache pcre-dev $PHPIZE_DEPS \
+    && pecl install redis \
+    && docker-php-ext-enable redis
+
+RUN apk add --no-cache $PHPIZE_DEPS \
+    && docker-php-ext-install pcntl \
+    && docker-php-ext-configure pcntl --enable-pcntl
+
+WORKDIR /var/www
+
+# Copy application source code
+COPY --chown=www-data:www-data . .
+COPY --from=vendor --chown=www-data:www-data /app/vendor ./vendor
+# Copy compiled Inertia/React assets into public directory
+COPY --from=frontend --chown=www-data:www-data /app/public/build ./public/build
+
+# Optimize Laravel for production
+RUN php artisan config:cache && \
+    php artisan route:cache && \
+    php artisan view:cache
+
+USER www-data
+EXPOSE 9000
+CMD ["php-fpm"]

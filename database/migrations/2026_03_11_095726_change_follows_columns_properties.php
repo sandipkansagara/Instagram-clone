@@ -11,23 +11,14 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('follows', function (Blueprint $table) {
-            $table->unsignedInteger('follower_id')->change();
+            $table->unsignedBigInteger('follower_id')->change();
             $table->foreign('follower_id')->references('id')->on('users')
                 ->cascadeOnDelete();
 
-            $table->unsignedInteger('following_id')->change();
+            $table->unsignedBigInteger('following_id')->change();
             $table->foreign('following_id')->references('id')->on('users')
                 ->cascadeOnDelete();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::table('follows', function (Blueprint $table) {
-            //
-        });
-    }
 };

@@ -1,6 +1,6 @@
-import type { CommentItemData } from '@/components/Comment/types';
+import type { CommentItemData } from '@/components/comment/types';
 import useComment from '@/hooks/Comment/useComment';
-import Comment from './Comment';
+import Comment from '../../modules/comment/components/Comment';
 
 const CommentList = ({ postId }: { postId: number }) => {
     const { data: commentList = [], isLoading, isError } = useComment(postId);

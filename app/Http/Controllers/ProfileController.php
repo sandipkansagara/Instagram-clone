@@ -7,7 +7,7 @@ use Inertia\Inertia;
 
 class ProfileController extends Controller
 {
-    public function show(string $username, GetProfileByUsername $getProfileByUsername)
+    public function show(string $username, GetProfileByUsername $getProfileByUsername) : \Inertia\Response
     {
         $profile = $getProfileByUsername->execute($username, auth()->user());
 

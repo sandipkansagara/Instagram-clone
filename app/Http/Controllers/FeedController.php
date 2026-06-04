@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Domains\Feed\Actions\GetFeed;
+use App\Http\Resources\FeedResource;
+use App\Models\FeedItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class FeedController extends Controller
 {
-    public function index(Request $request, GetFeed $getFeed)
+    public function index(Request $request, GetFeed $getFeed) : \Inertia\Response | \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
         $feed = $getFeed->execute(
             $request->user()->id,
@@ -15,11 +18,16 @@ class FeedController extends Controller
         );
 
         if (request()->wantsJson()) {
-            return response()->json($feed);
+            // return FeedResource::collection($feed)->additional([
+            //     'max_id' => $request->max_id ?? FeedItem::where('user_id', $request->user()->id)->max('id') ?? 0,
+            // ]);
+
+            return FeedResource::collection($feed);
         }
 
         return inertia('Feed/Index', [
-            'feed' => $feed,
+            'feed' => FeedResource::collection($feed),
+            //'max_id' => $request->max_id ?? FeedItem::where('user_id', $request->user()->id)->max('id') ?? 0,
         ]);
     }
 }

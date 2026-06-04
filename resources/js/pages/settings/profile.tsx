@@ -12,6 +12,9 @@ import SettingsLayout from '@/layouts/settings/layout';
 import { edit } from '@/routes/profile';
 import { send } from '@/routes/verification';
 import type { BreadcrumbItem } from '@/types';
+import { useRef, useState } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Camera } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -28,6 +31,20 @@ export default function Profile({
     status?: string;
 }) {
     const { auth } = usePage().props;
+
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [preview, setPreview] = useState<string | null>(auth.user.profile?.avatar ?? null);
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -71,6 +88,52 @@ export default function Profile({
                                     />
                                 </div>
 
+                                <div className="flex flex-col items-center gap-4">
+                                    <div
+                                        className="group relative cursor-pointer"
+                                        onClick={() =>
+                                            fileInputRef.current?.click()
+                                        }
+                                    >
+                                        <Avatar className="h-24 w-24 border-2 border-primary/10">
+                                            <AvatarImage
+                                                src={preview || ''}
+                                                alt="Profile preview"
+                                            />
+                                            <AvatarFallback className="bg-secondary text-2xl">
+                                                JD
+                                            </AvatarFallback>
+                                        </Avatar>
+
+                                        {/* Overlay Icon on Hover */}
+                                        <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+                                            <Camera className="h-8 w-8 text-white" />
+                                        </div>
+                                    </div>
+
+                                    {/* Hidden File Input */}
+                                    <Input
+                                        type="file"
+                                        id="avatar"
+                                        name="avatar"
+                                        accept="image/*"
+                                        className="hidden"
+                                        ref={fileInputRef}
+                                        onChange={handleImageChange}
+                                    />
+
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() =>
+                                            fileInputRef.current?.click()
+                                        }
+                                    >
+                                        Change Photo
+                                    </Button>
+                                </div>
+
                                 <div className="grid gap-2">
                                     <Label htmlFor="email">Email address</Label>
 
@@ -92,7 +155,7 @@ export default function Profile({
                                 </div>
 
                                 {mustVerifyEmail &&
-                                    auth.user.email_verified_at === null && (
+                                    auth.user.emailVerifiedAt === null && (
                                         <div>
                                             <p className="-mt-4 text-sm text-muted-foreground">
                                                 Your email address is

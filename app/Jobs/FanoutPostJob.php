@@ -26,7 +26,16 @@ class FanoutPostJob implements ShouldQueue
      */
     public function handle(FeedCacheService $feedCacheService): void
     {
-        $followers = $this->post->user->followers()->pluck('users.id');
+        /**
+         * @var \App\Models\User | null $user
+         */
+        $user = $this->post->user;
+
+        if (! $user) {
+            return;
+        }
+       
+        $followers = $user->followers()->pluck('users.id');
 
         if ($followers->isEmpty()) {
             return;

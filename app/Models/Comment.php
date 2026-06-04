@@ -7,27 +7,43 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @use HasFactory<\Database\Factories\CommentFactory>
+ * 
+ */
 class Comment extends Model
 {
     use HasFactory;
 
     protected $fillable = ['user_id', 'post_id', 'parent_id', 'body'];
 
+    /**
+     * @return BelongsTo<\App\Models\Post, $this>
+     */
     public function post(): BelongsTo
     {
         return $this->belongsTo(Post::class);
     }
 
+    /**
+     * @return BelongsTo<\App\Models\User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return BelongsTo<\App\Models\Comment, $this>
+     */
     public function parent(): BelongsTo
     {
         return $this->belongsTo(Comment::class, 'parent_id');
     }
 
+    /**
+     * @return HasMany<\App\Models\Comment, $this>
+     */
     public function replies(): HasMany
     {
         return $this->hasMany(Comment::class, 'parent_id');

@@ -1,9 +1,8 @@
-import ProfileCard from '@/components/User/ProfileCard';
+import ProfileCard from '@/modules/user/components/ProfileCard';
 import AppLayout from '@/layouts/app-layout';
 import { router } from '@inertiajs/react';
 
 export default function Show({ profile }: { profile: any }) {
-
     const follow = (userId: number) => {
         // Implement follow functionality here
         console.log(`Follow user with ID: ${userId}`);
@@ -11,7 +10,7 @@ export default function Show({ profile }: { profile: any }) {
     };
     return (
         <AppLayout>
-            <ProfileCard user={profile}/>
+            <ProfileCard user={profile} />
         </AppLayout>
     );
 }

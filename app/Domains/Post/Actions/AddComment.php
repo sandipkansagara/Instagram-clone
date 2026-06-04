@@ -14,10 +14,12 @@ class AddComment
 {
     /**
      * @param  array{body: string, parent_id?: int|null}  $data
+     * @return \App\Models\Comment
      */
     public function execute(Post $post, User $user, array $data): Comment
     {
         return DB::transaction(function () use ($post, $user, $data): Comment {
+            /** @var \App\Models\Comment $comment */
             $comment = $post->comments()->create([
                 'user_id' => $user->id,
                 'body' => $data['body'],

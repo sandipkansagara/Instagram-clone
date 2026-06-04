@@ -8,16 +8,15 @@ use App\Domains\Post\Actions\ListPosts;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Inertia\Inertia;
-use Inertia\Response;
-
 class PostController extends Controller
 {
-    public function index(ListPosts $listPosts): mixed
+    public function index(ListPosts $listPosts): \Inertia\Response|AnonymousResourceCollection
     {
         $posts = $listPosts->execute(auth()->user());
 
-        if (request()->wantsJson() && ! request()->hasHeader('X-Inertia')) {
+        if (request()->wantsJson() && !request()->hasHeader('X-Inertia')) {
             return PostResource::collection($posts);
         }
 
@@ -26,14 +25,14 @@ class PostController extends Controller
         ]);
     }
 
-    public function store(StorePostRequest $request, CreatePost $createPost)
+    public function store(StorePostRequest $request, CreatePost $createPost): \Illuminate\Http\JsonResponse
     {
         $post = $createPost->execute(auth()->user(), $request->validated());
 
         return response()->json($post, 201);
     }
 
-    public function show(Post $post, GetPost $getPost): Response
+    public function show(Post $post, GetPost $getPost): \Inertia\Response
     {
         $post = $getPost->execute($post->id);
 

@@ -7,10 +7,12 @@ use App\Domains\Notification\Actions\MarkNotificationAsRead;
 use App\Http\Resources\NotificationResource;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
+use \Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use \Illuminate\Http\Response;
 
 class NotificationController extends Controller
 {
-    public function index(Request $request, ListNotifications $listNotifications)
+    public function index(Request $request, ListNotifications $listNotifications) : \Inertia\Response|AnonymousResourceCollection
     {
         $notifications = $listNotifications->execute($request->user());
 
@@ -23,7 +25,7 @@ class NotificationController extends Controller
         ]);
     }
 
-    public function markAsRead(Request $request, DatabaseNotification $notification, MarkNotificationAsRead $markNotificationAsRead)
+    public function markAsRead(Request $request, DatabaseNotification $notification, MarkNotificationAsRead $markNotificationAsRead) : Response
     {
         $markNotificationAsRead->execute($request->user(), $notification);
 

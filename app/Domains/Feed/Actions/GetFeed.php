@@ -11,6 +11,9 @@ class GetFeed
         public FeedCacheService $feedCacheService,
     ) {}
 
+    /**
+     * @return CursorPaginator<int, \App\Models\FeedItem>
+     */
     public function execute(int $userId, ?string $cursor = null): CursorPaginator
     {
         return $this->feedCacheService->getUserFeed($userId, $cursor);

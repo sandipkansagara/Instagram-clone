@@ -1,11 +1,12 @@
-import Post from '@/components/Post/Post';
-import { ShowPostData, useShowPost } from '@/hooks/Post/useShowPost';
-import { patchSinglePostLike } from '@/hooks/Like/cache';
-import { postKeys } from '@/hooks/Post/queryKeys';
+import Post from '@/modules/post/components/Post';
+import { useShowPost } from '@/modules/post/hooks/useShowPost';
+import { patchSinglePostLike } from '@/modules/like/hooks/cache';
+import { postKeys } from '@/modules/post/queryKeys';
 import AppLayout from '@/layouts/app-layout';
+import { Post as PostType } from '@/modules/post/types';
 
 interface ShowProps {
-    post: ShowPostData;
+    post: PostType;
 }
 
 const Show = ({ post }: ShowProps) => {

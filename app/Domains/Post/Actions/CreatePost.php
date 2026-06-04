@@ -13,10 +13,12 @@ class CreatePost
 {
     /**
      * @param  array{caption?: ?string, media?: array<int, UploadedFile>}  $data
+     * 
      */
     public function execute(User $user, array $data): Post
     {
         return DB::transaction(function () use ($user, $data): Post {
+            /** @var \App\Models\Post $post */
             $post = $user->posts()->create([
                 'caption' => $data['caption'] ?? null,
             ]);
